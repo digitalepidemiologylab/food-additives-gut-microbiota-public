@@ -1,0 +1,45 @@
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:        shannon_entropy   R-squared:                       0.205
+Model:                            OLS   Adj. R-squared:                  0.188
+Method:                 Least Squares   F-statistic:                     12.93
+Date:                Wed, 11 Mar 2026   Prob (F-statistic):           3.91e-36
+Time:                        09:05:24   Log-Likelihood:                -636.42
+No. Observations:                 940   AIC:                             1313.
+Df Residuals:                     920   BIC:                             1410.
+Df Model:                          19                                         
+Covariance Type:                  HC3                                         
+===========================================================================================================================
+                                                              coef    std err          z      P>|z|      [0.025      0.975]
+---------------------------------------------------------------------------------------------------------------------------
+Intercept                                                   5.9860      0.223     26.863      0.000       5.549       6.423
+C(gender)[T.male]                                           0.0653      0.036      1.803      0.071      -0.006       0.136
+C(language, Treatment(reference='latin'))[T.german]        -0.1032      0.035     -2.912      0.004      -0.173      -0.034
+C(urbanity, Treatment(reference='rural'))[T.semi_urban]    -0.0586      0.066     -0.890      0.373      -0.188       0.070
+C(urbanity, Treatment(reference='rural'))[T.urban]         -0.1023      0.054     -1.893      0.058      -0.208       0.004
+C(smoking, Treatment(reference='non-smoker'))[T.former]    -0.1110      0.034     -3.216      0.001      -0.179      -0.043
+C(smoking, Treatment(reference='non-smoker'))[T.smoker]    -0.1942      0.057     -3.399      0.001      -0.306      -0.082
+C(antibiotics_treatment)[T.True]                           -0.1213      0.069     -1.765      0.078      -0.256       0.013
+batch[T.batch_0682]                                         0.0430      0.063      0.684      0.494      -0.080       0.166
+batch[T.batch_1205]                                         0.0622      0.069      0.905      0.365      -0.072       0.197
+batch[T.batch_1599]                                        -0.1098      0.067     -1.640      0.101      -0.241       0.021
+batch[T.batch_2013]                                        -0.0388      0.068     -0.574      0.566      -0.171       0.094
+batch[T.batch_2718]                                        -0.2726      0.068     -4.010      0.000      -0.406      -0.139
+preservatives_antioxidants                                 -0.0864      0.031     -2.776      0.005      -0.147      -0.025
+age                                                         0.0075      0.001      5.206      0.000       0.005       0.010
+bmi                                                        -0.0141      0.004     -3.185      0.001      -0.023      -0.005
+HEI                                                         0.0110      0.002      4.563      0.000       0.006       0.016
+defecate_quantity_per_day                                  -0.1181      0.023     -5.095      0.000      -0.163      -0.073
+energy_kcal_eaten                                        6.736e-06   4.03e-05      0.167      0.867   -7.23e-05    8.57e-05
+alcohol_eaten                                               0.0012      0.002      0.636      0.525      -0.002       0.005
+==============================================================================
+Omnibus:                       79.768   Durbin-Watson:                   1.978
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              120.844
+Skew:                          -0.631   Prob(JB):                     5.74e-27
+Kurtosis:                       4.222   Cond. No.                     3.29e+04
+==============================================================================
+
+Notes:
+[1] Standard Errors are heteroscedasticity robust (HC3)
+[2] The condition number is large, 3.29e+04. This might indicate that there are
+strong multicollinearity or other numerical problems.

@@ -1,0 +1,130 @@
+
+> cat("PERMANOVA (unweighted UniFrac) for additive quartiles\n")
+PERMANOVA (unweighted UniFrac) for additive quartiles
+
+> cat("Samples in distance matrix:", length(dist_ids), "\n")
+Samples in distance matrix: 992 
+
+> cat("Samples in metadata:", nrow(meta), "\n")
+Samples in metadata: 975 
+
+> cat("Samples used (intersection):", length(shared_ids), "\n\n")
+Samples used (intersection): 975 
+
+
+> cat("Unadjusted PERMANOVA: dist ~ additive_quartile\n")
+Unadjusted PERMANOVA: dist ~ additive_quartile
+
+> perm_unadj <- adonis2(
++   dist_sub ~ additive_quartile,
++   data = meta_sub,
++   permutations = 999
++ )
+
+> print(perm_unadj)
+Permutation test for adonis under reduced model
+Permutation: free
+Number of permutations: 999
+
+adonis2(formula = dist_sub ~ additive_quartile, data = meta_sub, permutations = 999)
+          Df SumOfSqs      R2      F Pr(>F)    
+Model      3    0.817 0.00618 2.0121  0.001 ***
+Residual 971  131.356 0.99382                  
+Total    974  132.173 1.00000                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+> cat("\n")
+
+
+> cat("Betadisper overall + permutest\n")
+Betadisper overall + permutest
+
+> bd <- betadisper(dist_sub, meta_sub$additive_quartile)
+
+> bd_overall <- permutest(bd, permutations = 999)
+
+> print(bd_overall)
+
+Permutation test for homogeneity of multivariate dispersions
+Permutation: free
+Number of permutations: 999
+
+Response: Distances
+           Df  Sum Sq    Mean Sq      F N.Perm Pr(>F)
+Groups      3 0.00062 0.00020662 0.0794    999  0.974
+Residuals 971 2.52807 0.00260358                     
+
+> cat("\n")
+
+
+> cat("Betadisper pairwise + permutest\n")
+Betadisper pairwise + permutest
+
+> bd_pairwise <- permutest(bd, pairwise = TRUE, permutations = 999)
+
+> print(bd_pairwise)
+
+Permutation test for homogeneity of multivariate dispersions
+Permutation: free
+Number of permutations: 999
+
+Response: Distances
+           Df  Sum Sq    Mean Sq      F N.Perm Pr(>F)
+Groups      3 0.00062 0.00020662 0.0794    999  0.975
+Residuals 971 2.52807 0.00260358                     
+
+Pairwise comparisons:
+(Observed p-value below diagonal, permuted p-value above diagonal)
+        Q1      Q2      Q3    Q4
+Q1         0.83200 0.80000 0.890
+Q2 0.82415         0.63600 0.713
+Q3 0.79312 0.63836         0.914
+Q4 0.88221 0.72483 0.91808      
+
+> cat("\n")
+
+
+> needed_cols <- c(
++   #"additive_quartile",
++   add_col,
++   "urbanity", "language",
++   "gender", "age", "bmi",
++   "antibiotics_treatment",
++   "s ..." ... [TRUNCATED] 
+
+> missing_cols <- setdiff(needed_cols, colnames(meta_sub))
+
+> if (length(missing_cols) > 0) {
++   cat("WARNING: Missing columns for adjusted model:\n")
++   print(missing_cols)
++   perm_adj <- NULL
++ } else {
++  .... [TRUNCATED] 
+Adjusted PERMANOVA (marginal effects): dist ~ additive intake + covariates
+Permutation test for adonis under reduced model
+Marginal effects of terms
+Permutation: free
+Number of permutations: 999
+
+adonis2(formula = form, data = meta_sub, permutations = 999, by = "margin")
+                                            Df SumOfSqs      R2      F Pr(>F)    
+ph_regulators_anti_caking_leavening_agents   1    0.203 0.00154 1.5856  0.027 *  
+urbanity                                     2    0.247 0.00187 0.9637  0.496    
+language                                     1    0.412 0.00311 3.2085  0.001 ***
+gender                                       1    0.367 0.00278 2.8616  0.001 ***
+age                                          1    0.765 0.00579 5.9644  0.001 ***
+bmi                                          1    0.330 0.00249 2.5690  0.001 ***
+antibiotics_treatment                        1    0.352 0.00266 2.7407  0.001 ***
+smoking                                      2    0.625 0.00473 2.4372  0.001 ***
+HEI                                          1    0.508 0.00385 3.9623  0.001 ***
+alcohol_eaten                                1    0.232 0.00176 1.8117  0.014 *  
+energy_kcal_eaten                            1    0.242 0.00183 1.8859  0.006 ** 
+defecate_quantity_per_day                    1    1.169 0.00884 9.1103  0.001 ***
+batch                                        5    2.748 0.02079 4.2825  0.001 ***
+Residual                                   954  122.411 0.92615                  
+Total                                      974  132.173 1.00000                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+> sink()

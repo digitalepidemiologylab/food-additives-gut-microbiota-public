@@ -1,0 +1,484 @@
+[
+  {
+    "additives": [
+      "en:e322",
+      "en:e322i"
+    ],
+    "count": 11
+  },
+  {
+    "additives": [
+      "en:e322"
+    ],
+    "count": 10
+  },
+  {
+    "additives": [
+      "en:e220"
+    ],
+    "count": 7
+  },
+  {
+    "additives": [
+      "en:e306"
+    ],
+    "count": 4
+  },
+  {
+    "additives": [
+      "en:e330"
+    ],
+    "count": 3
+  },
+  {
+    "additives": [
+      "en:e420",
+      "en:e428"
+    ],
+    "count": 2
+  },
+  {
+    "additives": [
+      "en:e306",
+      "en:e322"
+    ],
+    "count": 2
+  },
+  {
+    "additives": [
+      "en:e392"
+    ],
+    "count": 2
+  },
+  {
+    "additives": [
+      "en:e322",
+      "en:e322i",
+      "en:e414",
+      "en:e904"
+    ],
+    "count": 2
+  },
+  {
+    "additives": [
+      "en:e500",
+      "en:e500ii"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e160a",
+      "en:e160b",
+      "en:e160bii",
+      "en:e306"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e1200"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e160b",
+      "en:e160bii",
+      "en:e306",
+      "en:e322",
+      "en:e322i",
+      "en:e422"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e306",
+      "en:e401"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e322",
+      "en:e322i",
+      "en:e414"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e160b",
+      "en:e170",
+      "en:e170i",
+      "en:e306",
+      "en:e339"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e101"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e1200",
+      "en:e306",
+      "en:e322",
+      "en:e330",
+      "en:e414"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e160b",
+      "en:e307"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e414"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e420",
+      "en:e420ii"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e322",
+      "en:e422"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e14xx",
+      "en:e160a",
+      "en:e160b",
+      "en:e304",
+      "en:e304i",
+      "en:e307"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e401",
+      "en:e422"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e160"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e401",
+      "en:e535"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e220",
+      "en:e322",
+      "en:e322i",
+      "en:e330",
+      "en:e422"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e160b",
+      "en:e306",
+      "en:e339"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e450"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e339",
+      "en:e339iii"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e330",
+      "en:e420"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e422"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e14xx",
+      "en:e306",
+      "en:e322",
+      "en:e322i",
+      "en:e500",
+      "en:e500ii",
+      "en:e503",
+      "en:e503ii"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e14xx",
+      "en:e306",
+      "en:e322",
+      "en:e322i",
+      "en:e392",
+      "en:e500",
+      "en:e500ii",
+      "en:e503",
+      "en:e503ii"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e150c",
+      "en:e160b",
+      "en:e306",
+      "en:e322",
+      "en:e322i",
+      "en:e339"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e1200",
+      "en:e306",
+      "en:e322",
+      "en:e322i",
+      "en:e414"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e401"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e440"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e160a"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e1200",
+      "en:e220",
+      "en:e322",
+      "en:e322i",
+      "en:e422",
+      "en:e960"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e414",
+      "en:e904"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e306",
+      "en:e322",
+      "en:e322i"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e306",
+      "en:e500"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e322",
+      "en:e322i",
+      "en:e422",
+      "en:e471"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e330",
+      "en:e407"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e1200",
+      "en:e220",
+      "en:e960"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e14xx",
+      "en:e300",
+      "en:e322",
+      "en:e322i",
+      "en:e330",
+      "en:e414",
+      "en:e422",
+      "en:e440",
+      "en:e471"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e221",
+      "en:e320",
+      "en:e322",
+      "en:e322i",
+      "en:e330",
+      "en:e422"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e306",
+      "en:e339",
+      "en:e339iii"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e322",
+      "en:e330",
+      "en:e420",
+      "en:e422"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e965"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e1200",
+      "en:e322",
+      "en:e322i"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e160",
+      "en:e160b",
+      "en:e160bii",
+      "en:e304",
+      "en:e304i",
+      "en:e307",
+      "en:e322",
+      "en:e322i"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e300",
+      "en:e330"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e306",
+      "en:e322",
+      "en:e322i",
+      "en:e339"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e420"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e220",
+      "en:e322",
+      "en:e322i"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e322",
+      "en:e322i",
+      "en:e422"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e160b",
+      "en:e306",
+      "en:e322"
+    ],
+    "count": 1
+  },
+  {
+    "additives": [
+      "en:e220",
+      "en:e330",
+      "en:e422"
+    ],
+    "count": 1
+  }
+]

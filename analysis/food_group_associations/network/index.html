@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Additive Network Visualization</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .left-column {
+            flex: 2;
+            min-width: 600px;
+            position: relative;
+        }
+        .right-column {
+            flex: 1;
+            min-width: 300px;
+        }
+        #visualization {
+            width: 100%;
+            height: 800px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .link {
+            stroke: #999;
+            stroke-opacity: 0.4;
+        }
+        .node {
+            stroke: #fff;
+            stroke-width: 1.5px;
+        }
+        .node-label {
+            font-size: 12px;
+            pointer-events: none;
+            text-anchor: middle;
+            dominant-baseline: middle;
+            paint-order: stroke;
+            stroke: white;
+            stroke-width: 2px;
+            fill: #333;
+        }
+        .tooltip {
+            position: absolute;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            pointer-events: none;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .legend {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 5;
+            max-width: 250px;
+        }
+        .legend h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            margin-right: 8px;
+            border-radius: 2px;
+        }
+        .legend-label {
+            font-size: 12px;
+        }
+        .controls {
+            margin: 15px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .control-group {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: #4a7bab;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        button:hover {
+            background-color: #375e86;
+        }
+        .file-upload {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .file-input {
+            margin: 10px 0;
+        }
+        .file-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .upload-status {
+            margin-top: 10px;
+            color: #666;
+        }
+        .loading-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            color: #666;
+        }
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #4a7bab;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        .toggle-label {
+            margin-left: 10px;
+            font-size: 14px;
+        }
+        .panel {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .panel h2 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: #333;
+        }
+        .network-info {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        @media (max-width: 1100px) {
+            .container {
+                flex-direction: column;
+            }
+            .left-column, .right-column {
+                width: 100%;
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Food Additive Network Visualization</h1>
+    
+    <div class="file-upload">
+        <div class="file-input">
+            <label class="file-label" for="jsonFile">Upload Network JSON File:</label>
+            <input type="file" id="jsonFile" accept=".json">
+        </div>
+        
+        <div class="file-input">
+            <label class="file-label" for="csvFile">Upload Annotation CSV File:</label>
+            <input type="file" id="csvFile" accept=".csv">
+        </div>
+        
+        <div class="controls">
+            <button id="visualizeBtn" disabled>Visualize Network</button>
+            <div class="control-group">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="showLabelsToggle" checked>
+                    <span class="slider"></span>
+                </label>
+                <span class="toggle-label">Show Labels</span>
+            </div>
+            
+            <div class="control-group">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="showEcodesToggle" checked>
+                    <span class="slider"></span>
+                </label>
+                <span class="toggle-label">Show E-codes</span>
+            </div>
+        </div>
+        
+        <div class="upload-status" id="uploadStatus">Please upload both files to continue.</div>
+    </div>
+    
+    <div class="container">
+        <div class="left-column">
+            <div class="controls">
+                <button id="zoomIn" disabled>Zoom In</button>
+                <button id="zoomOut" disabled>Zoom Out</button>
+                <button id="resetZoom" disabled>Reset View</button>
+                <button id="exportImage" disabled>Export as Image</button>
+            </div>
+            
+            <div id="visualization">
+                <div class="loading-message">Upload files to generate visualization</div>
+                <div class="legend" id="legend">
+                    <h3>Additive Categories</h3>
+                    <div id="legendItems"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="right-column">
+            <div class="panel">
+                <h2>Network Information</h2>
+                <div class="network-info" id="networkInfo">
+                    <p>Upload your data files to analyze the additive network.</p>
+                    <p>This visualization shows food additives as a network, where:</p>
+                    <ul>
+                        <li>Each node represents a food additive (E-code)</li>
+                        <li>Node size indicates frequency of occurrence</li>
+                        <li>Node color indicates the additive category</li>
+                        <li>Links show which additives appear together</li>
+                        <li>Link thickness indicates frequency of co-occurrence</li>
+                    </ul>
+                    <p>You can zoom, drag nodes, and hover for more details.</p>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <h2>Selected Additive Details</h2>
+                <div id="additiveDetails">
+                    Click on a node to see detailed information.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let networkData = null;
+        let annotationData = null;
+        let svg, simulation, link, node, nodeLabels, tooltip, width, height;
+        let zoomHandler;
+        let showLabels = true;
+        let showEcodes = true;
+        let nodeStats = {
+            total: 0,
+            categories: {}
+        };
+        
+        // Color scale for different additive categories - updated with merged categories
+        const colorScale = d3.scaleOrdinal()
+            .domain([
+                'colorants', 
+                'preservatives_antioxidants', 
+                'sweeteners_glazing_agents', 
+                'thickeners_stabilizers_emulsifiers_gelling_agents', 
+                'ph_regulators_anti_caking_leavening_agents',
+                'flavor_enhancers',
+                'other_additives',
+                'unknown'
+            ])
+            .range([
+                    'gold',                                  // colorants
+                    '#66b3ff',                               // preservatives_antioxidants
+                    '#c2c2f0',                               // sweeteners_glazing_agents
+                    '#ffcc99',                               // thickeners_stabilizers_emulsifiers_gelling_agents
+                    '#b3de69',                               // ph_regulators_anti_caking_leavening_agents
+                    '#ffb3e6',                               // flavor_enhancers
+                    '#c2f0c2',                               // other_additives
+                    '#cccccc'                                // unknown
+            ]);
+        
+        // Nice category names for display
+        const categoryNames = {
+            'colorants': 'Colorants',
+            'preservatives_antioxidants': 'Preservatives & Antioxidants',
+            'sweeteners_glazing_agents': 'Sweeteners & Glazing',
+            'thickeners_stabilizers_emulsifiers_gelling_agents': 'Thickeners & Stabilizers',
+            'ph_regulators_anti_caking_leavening_agents': 'pH Regulators & Anti-caking',
+            'flavor_enhancers': 'Flavor Enhancers',
+            'other_additives': 'Other Additives',
+            'unknown': 'Unknown'
+        };
+        
+        // File upload event listeners
+        document.getElementById('jsonFile').addEventListener('change', handleJsonUpload);
+        document.getElementById('csvFile').addEventListener('change', handleCsvUpload);
+        document.getElementById('visualizeBtn').addEventListener('click', initializeVisualization);
+        document.getElementById('showLabelsToggle').addEventListener('change', toggleLabels);
+        document.getElementById('showEcodesToggle').addEventListener('change', toggleEcodes);
+        
+        // Check if files are uploaded
+        function checkFilesUploaded() {
+            const visualizeBtn = document.getElementById('visualizeBtn');
+            const uploadStatus = document.getElementById('uploadStatus');
+            
+            if (networkData && annotationData) {
+                visualizeBtn.disabled = false;
+                uploadStatus.textContent = 'Both files uploaded. Click "Visualize Network" to continue.';
+                uploadStatus.style.color = '#4a7bab';
+            } else {
+                let message = 'Please upload ';
+                if (!networkData && !annotationData) {
+                    message += 'both files to continue.';
+                } else if (!networkData) {
+                    message += 'the network JSON file to continue.';
+                } else {
+                    message += 'the annotation CSV file to continue.';
+                }
+                
+                uploadStatus.textContent = message;
+                uploadStatus.style.color = '#666';
+                visualizeBtn.disabled = true;
+            }
+        }
+        
+        // Handle JSON file upload
+        function handleJsonUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    networkData = JSON.parse(e.target.result);
+                    checkFilesUploaded();
+                } catch (error) {
+                    alert('Error parsing JSON file: ' + error.message);
+                    console.error('Error parsing JSON:', error);
+                }
+            };
+            reader.readAsText(file);
+        }
+        
+        // Handle CSV file upload
+        function handleCsvUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                annotationData = e.target.result;
+                checkFilesUploaded();
+            };
+            reader.readAsText(file);
+        }
+        
+        // Toggle node labels visibility
+        function toggleLabels() {
+            showLabels = document.getElementById('showLabelsToggle').checked;
+            if (nodeLabels) {
+                nodeLabels.style('display', showLabels ? 'block' : 'none');
+            }
+        }
+        
+        // Toggle between showing E-codes or names in labels
+        function toggleEcodes() {
+            showEcodes = document.getElementById('showEcodesToggle').checked;
+            if (nodeLabels) {
+                nodeLabels.text(d => {
+                    if (showEcodes) {
+                        return d.id; // Show only the E-code
+                    } else {
+                        return d.name; // Show only the name
+                    }
+                });
+            }
+        }
+        
+        // Export visualization as image
+        function exportVisualization() {
+            // Display a message outside the visualization container
+            const statusMsg = document.createElement('div');
+            statusMsg.textContent = 'Generating image... Please wait';
+            statusMsg.style.position = 'fixed';
+            statusMsg.style.top = '10px';
+            statusMsg.style.left = '50%';
+            statusMsg.style.transform = 'translateX(-50%)';
+            statusMsg.style.padding = '10px';
+            statusMsg.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+            statusMsg.style.color = 'white';
+            statusMsg.style.borderRadius = '5px';
+            statusMsg.style.zIndex = '10000';
+            statusMsg.style.fontWeight = 'bold';
+            document.body.appendChild(statusMsg);
+            
+            // Small delay to ensure UI updates before capture
+            setTimeout(() => {
+                // Use html2canvas to capture the visualization
+                html2canvas(document.getElementById('visualization'), {
+                    backgroundColor: '#ffffff',
+                    scale: 2, // Higher scale for better quality
+                    logging: false,
+                    useCORS: true
+                }).then(canvas => {
+                    // Remove status message
+                    statusMsg.remove();
+                    
+                    // Create a download link
+                    const link = document.createElement('a');
+                    link.download = 'food_additive_network.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                    
+                    // Show success message
+                    const successMsg = document.createElement('div');
+                    successMsg.textContent = 'Image saved successfully!';
+                    successMsg.style.position = 'fixed';
+                    successMsg.style.top = '10px';
+                    successMsg.style.left = '50%';
+                    successMsg.style.transform = 'translateX(-50%)';
+                    successMsg.style.padding = '10px';
+                    successMsg.style.backgroundColor = 'rgba(40, 167, 69, 0.9)';
+                    successMsg.style.color = 'white';
+                    successMsg.style.borderRadius = '5px';
+                    successMsg.style.zIndex = '10000';
+                    document.body.appendChild(successMsg);
+                    setTimeout(() => successMsg.remove(), 3000);
+                }).catch(error => {
+                    console.error('Error generating image:', error);
+                    statusMsg.textContent = 'Error generating image. Please try again.';
+                    statusMsg.style.backgroundColor = 'rgba(220, 53, 69, 0.9)';
+                    setTimeout(() => statusMsg.remove(), 3000);
+                });
+            }, 100);
+        }
+        
+        // Initialize the visualization
+        function initializeVisualization() {
+            if (!networkData || !annotationData) {
+                alert('Please upload both files first.');
+                return;
+            }
+            
+            // Enable control buttons
+            document.getElementById('zoomIn').disabled = false;
+            document.getElementById('zoomOut').disabled = false;
+            document.getElementById('resetZoom').disabled = false;
+            document.getElementById('exportImage').disabled = false;
+            
+            // Set up dimensions
+            width = document.getElementById('visualization').clientWidth;
+            height = document.getElementById('visualization').clientHeight;
+            
+            // Clear previous visualization if any
+            document.getElementById('visualization').innerHTML = '';
+            
+            // Add legend back
+            const legend = document.createElement('div');
+            legend.className = 'legend';
+            legend.id = 'legend';
+            legend.innerHTML = '<h3>Additive Categories</h3><div id="legendItems"></div>';
+            document.getElementById('visualization').appendChild(legend);
+            
+            // Create the SVG element
+            svg = d3.select('#visualization')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            // Add zoom functionality
+            zoomHandler = d3.zoom()
+                .scaleExtent([0.1, 8])
+                .on('zoom', (event) => {
+                    const transform = event.transform;
+                    d3.select('svg g').attr('transform', transform);
+                });
+            
+            svg.call(zoomHandler);
+            
+            // Create a group element for all the visualization elements
+            const g = svg.append('g');
+            
+            // Create tooltip
+            tooltip = d3.select('body')
+                .append('div')
+                .attr('class', 'tooltip')
+                .style('opacity', 0);
+            
+            // Process the data and create visualization
+            processData(networkData, annotationData);
+            
+            // Set up event listeners for the control buttons
+            document.getElementById('zoomIn').addEventListener('click', () => {
+                svg.transition().duration(300).call(zoomHandler.scaleBy, 1.5);
+            });
+            
+            document.getElementById('zoomOut').addEventListener('click', () => {
+                svg.transition().duration(300).call(zoomHandler.scaleBy, 0.75);
+            });
+            
+            document.getElementById('resetZoom').addEventListener('click', () => {
+                resetViewToCenter();
+            });
+            
+            document.getElementById('exportImage').addEventListener('click', exportVisualization);
+            
+            // Create the legend
+            createLegend();
+            
+            // Update network information
+            updateNetworkInfo();
+            
+            // Center the visualization initially
+            resetViewToCenter();
+        }
+        
+        // Reset view to center the visualization
+        function resetViewToCenter() {
+            svg.transition().duration(300).call(
+                zoomHandler.transform,
+                d3.zoomIdentity.translate(width / 2, height / 2).scale(0.8)
+            );
+        }
+        
+        // Process the data and create the visualization
+        function processData(networkData, annotationCsv) {
+            // Parse the CSV data
+            const annotations = d3.csvParse(annotationCsv);
+            
+            // Create a map to store additive information
+            const additiveMap = new Map();
+            annotations.forEach(row => {
+                // Apply the category mapping as specified
+                let category = row.category;
+                
+                // Apply the category merging logic
+                if (category === 'preservatives' || category === 'antioxidants') {
+                    category = 'preservatives_antioxidants';
+                } else if (category === 'sweeteners' || category === 'glazing_agents') {
+                    category = 'sweeteners_glazing_agents';
+                }
+                
+                additiveMap.set(row.ecode.toLowerCase(), {
+                    name: row.name,
+                    category: category
+                });
+            });
+            
+            // Calculate the total counts for each additive
+            const additiveCounts = new Map();
+            const linksMap = new Map();
+            
+            networkData.forEach(item => {
+                item.additives.forEach(additive => {
+                    // Extract the e-code (remove 'en:' prefix)
+                    const ecode = additive.replace('en:', '');
+                    
+                    // Update the count
+                    const currentCount = additiveCounts.get(ecode) || 0;
+                    additiveCounts.set(ecode, currentCount + item.count);
+                });
+                
+                // Create links between additives in the same group
+                for (let i = 0; i < item.additives.length; i++) {
+                    for (let j = i + 1; j < item.additives.length; j++) {
+                        const source = item.additives[i].replace('en:', '');
+                        const target = item.additives[j].replace('en:', '');
+                        
+                        // Create links for the visualization
+                        const linkKey = source < target 
+                            ? `${source}-${target}` 
+                            : `${target}-${source}`;
+                        
+                        if (!linksMap.has(linkKey)) {
+                            linksMap.set(linkKey, {
+                                source: source,
+                                target: target,
+                                value: item.count
+                            });
+                        } else {
+                            const link = linksMap.get(linkKey);
+                            link.value += item.count;
+                        }
+                    }
+                }
+            });
+            
+            // Create nodes from the additive counts
+            const nodes = Array.from(additiveCounts.entries()).map(([ecode, count]) => {
+                const info = additiveMap.get(ecode) || { name: ecode, category: 'unknown' };
+                return {
+                    id: ecode,
+                    name: info.name || ecode,
+                    category: info.category || 'unknown',
+                    value: count
+                };
+            });
+            
+            // Gather statistics for network info
+            nodeStats.total = nodes.length;
+            nodeStats.categories = {};
+            nodes.forEach(node => {
+                if (!nodeStats.categories[node.category]) {
+                    nodeStats.categories[node.category] = 0;
+                }
+                nodeStats.categories[node.category]++;
+            });
+            
+            // Create links from the co-occurrence data
+            const links = Array.from(linksMap.values());
+            
+            // Create the force simulation
+            simulation = d3.forceSimulation(nodes)
+                .force('link', d3.forceLink(links).id(d => d.id).distance(100))
+                .force('charge', d3.forceManyBody().strength(-300))
+                .force('center', d3.forceCenter(width / 2, height / 2))
+                .force('collision', d3.forceCollide().radius(d => Math.sqrt(d.value) * 2 + 10));
+            
+            // Add the links
+            link = svg.select('g')
+                .selectAll('.link')
+                .data(links)
+                .enter()
+                .append('line')
+                .attr('class', 'link')
+                .attr('stroke-width', d => Math.sqrt(d.value) / 2);
+            
+            // Add the nodes
+            node = svg.select('g')
+                .selectAll('.node')
+                .data(nodes)
+                .enter()
+                .append('circle')
+                .attr('class', 'node')
+                .attr('r', d => Math.sqrt(d.value) * 2 + 5)
+                .attr('fill', d => colorScale(d.category))
+                .call(d3.drag()
+                    .on('start', dragstarted)
+                    .on('drag', dragged)
+                    .on('end', dragended));
+            
+            // Add node labels
+            nodeLabels = svg.select('g')
+                .selectAll('.node-label')
+                .data(nodes)
+                .enter()
+                .append('text')
+                .attr('class', 'node-label')
+                .text(d => showEcodes ? d.id : d.name)
+                .style('display', showLabels ? 'block' : 'none')
+                .style('font-size', d => {
+                    // Scale the font size based on node radius (but with a minimum)
+                    const radius = Math.sqrt(d.value) * 2 + 5;
+                    return Math.max(10, Math.min(14, radius * 0.6)) + 'px';
+                });
+            
+            // Add tooltips to nodes
+            node.on('mouseover', function(event, d) {
+                tooltip.transition()
+                    .duration(200)
+                    .style('opacity', .9);
+                
+                tooltip.html(`
+                    <strong>E-code:</strong> ${d.id}<br>
+                    <strong>Name:</strong> ${d.name}<br>
+                    <strong>Category:</strong> ${categoryNames[d.category] || d.category}<br>
+                    <strong>Total Count:</strong> ${d.value}
+                `)
+                    .style('left', (event.pageX + 10) + 'px')
+                    .style('top', (event.pageY - 28) + 'px');
+            })
+            .on('mouseout', function() {
+                tooltip.transition()
+                    .duration(500)
+                    .style('opacity', 0);
+            })
+            .on('click', function(event, d) {
+                showAdditiveDetails(d);
+            });
+            
+            // Add title to nodes for accessibility
+            node.append('title')
+                .text(d => `${d.id} - ${d.name}`);
+            
+            // Set up the simulation ticker
+            simulation.on('tick', () => {
+                link
+                    .attr('x1', d => d.source.x)
+                    .attr('y1', d => d.source.y)
+                    .attr('x2', d => d.target.x)
+                    .attr('y2', d => d.target.y);
+                
+                node
+                    .attr('cx', d => d.x)
+                    .attr('cy', d => d.y);
+                
+                nodeLabels
+                    .attr('x', d => d.x)
+                    .attr('y', d => d.y);
+            });
+        }
+        
+        // Show details for a selected additive
+        function showAdditiveDetails(additive) {
+            const detailsContainer = document.getElementById('additiveDetails');
+            
+            // Find connected additives (neighbors)
+            const neighbors = [];
+            link.each(function(d) {
+                if (d.source.id === additive.id) {
+                    neighbors.push({
+                        id: d.target.id,
+                        name: d.target.name,
+                        category: d.target.category,
+                        strength: d.value
+                    });
+                } else if (d.target.id === additive.id) {
+                    neighbors.push({
+                        id: d.source.id,
+                        name: d.source.name,
+                        category: d.source.category,
+                        strength: d.value
+                    });
+                }
+            });
+            
+            // Sort neighbors by connection strength
+            neighbors.sort((a, b) => b.strength - a.strength);
+            
+            // Create details HTML
+            let detailsHTML = `
+                <div style="padding: 10px;">
+                    <h3 style="margin-top: 0; color: ${colorScale(additive.category)};">${additive.id.toUpperCase()} - ${additive.name}</h3>
+                    <p><strong>Category:</strong> ${categoryNames[additive.category] || additive.category}</p>
+                    <p><strong>Occurrence Count:</strong> ${additive.value}</p>
+                    
+                    <h4>Top Co-occurring Additives:</h4>
+            `;
+            
+            if (neighbors.length > 0) {
+                detailsHTML += '<ul style="padding-left: 20px;">';
+                const topNeighbors = neighbors.slice(0, 5); // Show top 5 co-occurrences
+                
+                topNeighbors.forEach(neighbor => {
+                    detailsHTML += `
+                        <li style="margin-bottom: 5px;">
+                            <strong>${neighbor.id.toUpperCase()}</strong> - ${neighbor.name} 
+                            <span style="color: #666; font-size: 12px;">(${neighbor.strength} occurrences)</span>
+                        </li>
+                    `;
+                });
+                
+                detailsHTML += '</ul>';
+                
+                if (neighbors.length > 5) {
+                    detailsHTML += `<p style="font-size: 12px; color: #666;">+ ${neighbors.length - 5} more connections</p>`;
+                }
+            } else {
+                detailsHTML += '<p>No co-occurring additives found.</p>';
+            }
+            
+            detailsHTML += '</div>';
+            
+            detailsContainer.innerHTML = detailsHTML;
+        }
+        
+        // Update the network information panel
+        function updateNetworkInfo() {
+            const infoContainer = document.getElementById('networkInfo');
+            
+            let infoHTML = `
+                <p><strong>Network Statistics:</strong></p>
+                <ul>
+                    <li>${nodeStats.total} unique additives detected</li>
+            `;
+            
+            // Add category breakdown
+            const categories = Object.keys(nodeStats.categories).sort((a, b) => 
+                nodeStats.categories[b] - nodeStats.categories[a]
+            );
+            
+            categories.forEach(category => {
+                if (category !== 'unknown') {
+                    infoHTML += `
+                        <li>${nodeStats.categories[category]} ${categoryNames[category] || category} 
+                            <span style="color: ${colorScale(category)};">■</span>
+                        </li>
+                    `;
+                }
+            });
+            
+            infoHTML += `
+                </ul>
+                <p>The node size indicates how frequently an additive appears in the dataset.</p>
+                <p>Click on a node to see detailed information about that additive.</p>
+            `;
+            
+            infoContainer.innerHTML = infoHTML;
+        }
+        
+        // Create the legend for the visualization
+        function createLegend() {
+            const legendContainer = document.getElementById('legendItems');
+            legendContainer.innerHTML = '';
+            
+            // Get unique categories actually present in the data
+            const categories = Object.keys(nodeStats.categories).sort();
+            
+            // Create legend items
+            categories.forEach(category => {
+                if (category === 'unknown') return; // Skip 'unknown' category in legend
+                
+                const legendItem = document.createElement('div');
+                legendItem.className = 'legend-item';
+                
+                const colorBox = document.createElement('div');
+                colorBox.className = 'legend-color';
+                colorBox.style.backgroundColor = colorScale(category);
+                
+                const label = document.createElement('span');
+                label.className = 'legend-label';
+                label.textContent = categoryNames[category] || category.replace(/_/g, ' ');
+                
+                legendItem.appendChild(colorBox);
+                legendItem.appendChild(label);
+                legendContainer.appendChild(legendItem);
+            });
+        }
+        
+        // Drag functions for the nodes
+        function dragstarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+        
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+        
+        function dragended(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+    </script>
+</body>
+</html>

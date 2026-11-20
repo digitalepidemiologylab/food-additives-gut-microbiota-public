@@ -1,0 +1,47 @@
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:        shannon_entropy   R-squared:                       0.209
+Model:                            OLS   Adj. R-squared:                  0.191
+Method:                 Least Squares   F-statistic:                     11.55
+Date:                Wed, 11 Mar 2026   Prob (F-statistic):           1.36e-34
+Time:                        09:03:42   Log-Likelihood:                -633.90
+No. Observations:                 940   AIC:                             1312.
+Df Residuals:                     918   BIC:                             1418.
+Df Model:                          21                                         
+Covariance Type:            nonrobust                                         
+===========================================================================================================================
+                                                              coef    std err          t      P>|t|      [0.025      0.975]
+---------------------------------------------------------------------------------------------------------------------------
+Intercept                                                   5.9589      0.229     25.988      0.000       5.509       6.409
+C(gender)[T.male]                                           0.0583      0.036      1.600      0.110      -0.013       0.130
+C(language, Treatment(reference='latin'))[T.german]        -0.0986      0.035     -2.851      0.004      -0.166      -0.031
+C(urbanity, Treatment(reference='rural'))[T.semi_urban]    -0.0553      0.071     -0.777      0.438      -0.195       0.084
+C(urbanity, Treatment(reference='rural'))[T.urban]         -0.1085      0.062     -1.761      0.079      -0.230       0.012
+C(smoking, Treatment(reference='non-smoker'))[T.former]    -0.1155      0.035     -3.344      0.001      -0.183      -0.048
+C(smoking, Treatment(reference='non-smoker'))[T.smoker]    -0.2000      0.056     -3.546      0.000      -0.311      -0.089
+C(antibiotics_treatment)[T.True]                           -0.1113      0.074     -1.495      0.135      -0.258       0.035
+batch[T.batch_0682]                                         0.0555      0.063      0.884      0.377      -0.068       0.179
+batch[T.batch_1205]                                         0.0788      0.065      1.213      0.225      -0.049       0.206
+batch[T.batch_1599]                                        -0.1000      0.067     -1.495      0.135      -0.231       0.031
+batch[T.batch_2013]                                        -0.0280      0.067     -0.420      0.675      -0.159       0.103
+batch[T.batch_2718]                                        -0.2587      0.067     -3.848      0.000      -0.391      -0.127
+Mixture1                                                   -0.1490      0.185     -0.806      0.421      -0.512       0.214
+Mixture2                                                   -0.0967      0.109     -0.884      0.377      -0.311       0.118
+Mixture3                                                   -0.3938      0.125     -3.154      0.002      -0.639      -0.149
+age                                                         0.0077      0.001      5.468      0.000       0.005       0.010
+bmi                                                        -0.0136      0.005     -3.020      0.003      -0.022      -0.005
+HEI                                                         0.0113      0.002      4.626      0.000       0.007       0.016
+defecate_quantity_per_day                                  -0.1210      0.022     -5.404      0.000      -0.165      -0.077
+energy_kcal_eaten                                        2.847e-06   4.48e-05      0.064      0.949   -8.51e-05    9.08e-05
+alcohol_eaten                                               0.0011      0.002      0.555      0.579      -0.003       0.005
+==============================================================================
+Omnibus:                       72.859   Durbin-Watson:                   1.986
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              107.718
+Skew:                          -0.596   Prob(JB):                     4.07e-24
+Kurtosis:                       4.152   Cond. No.                     3.37e+04
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 3.37e+04. This might indicate that there are
+strong multicollinearity or other numerical problems.
