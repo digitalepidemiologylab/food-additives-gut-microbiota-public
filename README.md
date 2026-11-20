@@ -47,3 +47,8 @@ pip install -e .
 
 Detailed descriptions of individual analyses and figure-level mappings are provided in `analysis/README.md`.
 
+---
+
+## License
+
+The code in this repository is released under the MIT License (see `LICENSE`).

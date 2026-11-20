@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite it using the metadata below."
+title: "Food additive exposure associated with reduction in gut diversity"
+type: software
+version: 1.0.0
+license: MIT
+authors:
+  - given-names: Rohan
+    family-names: Singh
+repository-code: "https://github.com/digitalepidemiologylab/food-additives-gut-microbiota-public"
+abstract: >-
+  Analysis code, result tables and figures for the manuscript "Food additive
+  exposure associated with reduction in gut diversity", a study of food
+  additive exposure and gut microbiota in the Food & You digital cohort.
+  Participant-level metadata is not included.
+keywords:
+  - food additives
+  - gut microbiota
+  - microbial diversity
+  - digital cohort
+  - nutrition
